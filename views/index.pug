@@ -1,5 +1,7 @@
 extends layout
 
+include mixins/_pinList
+
 block content
   h1= title
-  p Welcome to #{title}
+  +pinList(pins)

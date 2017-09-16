@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const pinController = require('../controllers/pinController');
+const { catchErrors } = require('../handlers/errorHandlers');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/', catchErrors(pinController.homePage));
+router.get('/add', pinController.addPin);
+router.post('/add', catchErrors(pinController.createPin));
 
 module.exports = router;

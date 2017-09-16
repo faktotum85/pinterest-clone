@@ -1,0 +1,12 @@
+mixin pinList(pins = [])
+
+  .grid
+    each pin in pins
+      .card.grid-item
+        img.card-img-top(src=pin.url alt=pin.name onError="this.onerror=null;this.src='/images/placeholder-image.png'")
+        .card-body
+          p= pin.name
+          
+  script(src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js')
+  script(src='/javascripts/masonry.js')
+    

@@ -1,0 +1,13 @@
+mixin pinForm(pin = {})
+  
+  form(action='/add', method='POST')
+    .form-row
+      .col-12.col-md-6
+        .form-group
+          label(for='name') Pin name
+          input.form-control(type='text' id='name' name='name' placeholder='Name' required)
+      .col-12.col-md-6
+        .form-group
+          label(for='url') Image URL
+          input.form-control(type='url' id='url' name='url' placeholder='URL' required onInvalid="this.setCustomValidity(`Please enter a valid URL (including 'http://' or 'https://')`)" oninput="setCustomValidity('')")
+    button.btn.btn-primary(type='submit') Submit

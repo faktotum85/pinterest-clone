@@ -5,7 +5,11 @@ mixin pinList(pins = [])
       .card.grid-item
         img.card-img-top(src=pin.url alt=pin.name onError="this.onerror=null;this.src='/images/placeholder-image.png'")
         .card-body
-          p= pin.name
+          h4.card-title #{pin.name}
+          p.card-text by 
+            a(href=`/user/${pin.author._id}`) #{pin.author.twitter.username}
+          if user && (user._id.equals(pin.author._id))
+            a.btn.btn-danger(href=`/delete/${pin._id}`) Delete Pin
           
   script(src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js')
   script(src='/javascripts/masonry.js')

@@ -6,6 +6,22 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const flash = require('connect-flash');
+
+const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 require('dotenv').config({ path: '.env' });
 
@@ -19,12 +35,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 // importing all models
-require('./models/Pin');
 require('./models/User');
-
-
-
-const app = express();
+require('./models/Pin');
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -37,18 +49,15 @@ app.use(session({ // set up sessions
 app.use(passport.initialize()); // link passport with sessions
 app.use(passport.session());
 
+app.use(flash());
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// pass variables to our templates + all requests
+app.use((req, res, next) => {
+  res.locals.flashes = req.flash();
+  res.locals.user = req.user || null;
+  res.locals.currentPath = req.path;
+  next();
+});
 
 const index = require('./routes/index');
 const user = require('./routes/user');

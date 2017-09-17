@@ -16,13 +16,35 @@ html
           span.navbar-toggler-icon
 
         .collapse.navbar-collapse(id='navbarNav')
+          ul.navbar-nav.mr-auto
+            if user
+              li.nav-item
+                a.nav-link(href='/add') New Pin
+              li.nav-item
+                a.nav-link(href=`/user/${user._id}`) My pins
           ul.navbar-nav
-            li.nav-item
-              a.nav-link(href='/add') New Pin
+            if user
+              li.nav-item
+                a.nav-link(href='/logout') Log out
+            else 
+              li.nav-item
+                a.nav-link(href='/twitter') Log in with Twitter
     
     .container.my-5
-      block content
       
+      block messages
+        if locals.flashes
+          - const categories = Object.keys(locals.flashes)
+          each category in categories
+            each message in flashes[category]
+              .alert.alert-dismissible.fade.show(role="alert" class=`alert-${category}`)
+                button.close(type="button" data-dismiss="alert" aria-label="Close")
+                  span(aria-hidden="true") &times;
+                . 
+                  #{message}
+      
+      block content
+
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js')
